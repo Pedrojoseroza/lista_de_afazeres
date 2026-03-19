@@ -64,18 +64,18 @@ novoTitulo.value = "";
   novosDetalhes.value = "";
   
 }
-function delTarefa(id) {
-  const index = listaDeTarefas.value.findIndex(e => e.id == id);
+function delTarefa(item) {
+  const index = listaDeTarefas.value.indexOf(item);
   listaDeTarefas.value.splice(index, 1);
 };
-function edtTarefa(id) {
-  const index = listaDeTarefas.value.findIndex(e => e.id == id);
+function edtTarefa(item) {
+  const index = listaDeTarefas.value.indexOf(item);
   novoTitulo.value = listaDeTarefas.value[index].titulo;
   novosDetalhes.value = listaDeTarefas.value[index].detalhes;
   posicao.value = index;
 }
-function concluirTarefa(id) {
-  const index = listaDeTarefas.value.findIndex(e => e.id == id);
+function concluirTarefa(item) {
+  const index = listaDeTarefas.value.indexOf(item);
   if (
     listaDeTarefas.value[index].status == 'pendente') {
       listaDeTarefas.value[index].status = 'concluida';
@@ -116,15 +116,15 @@ function concluirTarefa(id) {
     <div class="box">
       <ul>
         <li v-for="tarefa in filtrarTarefas()" :key="tarefa.id" :class="{concluida: tarefa.status == 'concluida'}">
-          <span @click="concluirTarefa(tarefa.id)">
+          <span @click="concluirTarefa(tarefa)">
             {{ tarefa.titulo }}
             <span>
               {{ tarefa.detalhes }}
             </span>
           </span>
           <div>
-            <button @click="edtTarefa(tarefa.id)" ><font-awesome-icon icon="fa-solid fa-pen-to-square"/></button>
-            <button @click="delTarefa(tarefa.id)"> <font-awesome-icon icon="fa-solid fa-trash"/> </button>
+            <button @click="edtTarefa(tarefa)" ><font-awesome-icon icon="fa-solid fa-pen-to-square"/></button>
+            <button @click="delTarefa(tarefa)"> <font-awesome-icon icon="fa-solid fa-trash"/> </button>
           </div>
         </li>
       </ul>

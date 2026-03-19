@@ -5,62 +5,68 @@ const novoTitulo = ref('');
 const novosDetalhes = ref('');
 const posicao = ref(-1);
 const antigaLista = JSON.parse(localStorage.getItem('lista')) || [
+  {
+    id: 1,
+    titulo: 'Tarefa 1',
+    detalhes: 'Estudar programação',
+    status: 'concluida'
+  },
+  {
+    id: 2,
+    titulo: 'Tarefa 2',
+    detalhes: 'Estudar física',
+    status: 'concluida',
+  },
+  {
+    id: 3,
+    titulo: 'Tarefa 3',
+    detalhes: 'Treinar xadrez',
+    status: 'pendente'
+  },
 {
-id: 1,
-titulo: 'Tarefa 1',
-detalhes: 'Estudar programação',
-status: 'concluida'
-},
-{
-id: 2,
-titulo: 'Tarefa 2',
-detalhes: 'Estudar física',
-status: 'concluida',
-},
-{
-id: 3,
-titulo: 'Tarefa 3',
-detalhes: 'Treinar xadrez',
-status: 'pendente'
-},
-{
-id: 4,
-titulo: 'Tarefa 4',
-detalhes: 'Jogar futsal',
-status: 'pendente'
+  id: 4,
+  titulo: 'Tarefa 4',
+  detalhes: 'Jogar futsal',
+  status: 'pendente'
 }];
 const listaDeTarefas = ref(antigaLista);
-const novoId = ref(2);
+const novoId = ref(JSON.parse(localStorage.getItem('id')) || '5');
+const quantConcluidas =  ref(listaDeTarefas.value.filter(e => e.status == 'concluida').length);
+const quantPendente = ref(listaDeTarefas.value.filter(e => e.status == 'pendente').length);
+
+// Nunca haverá dois itens como o mesmo id, basicamente, o ID é a tentativa de replicar uma chave primária;
+watch(novoId.value, (novoId) => {
+  localStorage.setItem('id', JSON.stringify(novoId));
+})
 watch(listaDeTarefas.value, (novaLista) => {
-  console.log(localStorage.getItem('lista'));
   localStorage.setItem('lista', JSON.stringify(novaLista));
+  quantConcluidas.value = listaDeTarefas.value.filter(e => e.status == 'concluida').length;
+  quantPendente.value = listaDeTarefas.value.filter(e => e.status == 'pendente').length;
 })
 function addTarefa() {
-if (posicao.value == -1) {
-  if (novoTitulo.value.trim() !== '' && novosDetalhes.value.trim() !== "") {
-    listaDeTarefas.value.push({
-      id: novoId, titulo: novoTitulo.value,
-      detalhes: novosDetalhes.value,
-      status: 'pendente'
-    });
-    novoId.value++;
+  if (posicao.value == -1) {
+    if (novoTitulo.value.trim() !== '' && novosDetalhes.value.trim() !== "") {
+      listaDeTarefas.value.push({
+        id: novoId, titulo: novoTitulo.value,
+        detalhes: novosDetalhes.value,
+        status: 'pendente'
+      });
+      novoId.value++;
+    } else {
+      alert("Não deixe nenhum campo vazio ao tentar adicionar tarefas!");
+    } 
   } else {
-    alert("Não deixe nenhum campo vazio ao tentar adicionar tarefas!");
-  } 
-} else {
   const itemAEditar = listaDeTarefas.value[posicao.value];
-  console.log(itemAEditar);
   itemAEditar.titulo = novoTitulo.value;
   itemAEditar.detalhes = novosDetalhes.value;
 }
-  novoTitulo.value = "";
+novoTitulo.value = "";
   novosDetalhes.value = "";
-
+  
 }
 function delTarefa(id) {
   const index = listaDeTarefas.value.findIndex(e => e.id == id);
   listaDeTarefas.value.splice(index, 1);
-  console.log('Tá entrando' + listaDeTarefas.value[index]);
 };
 function edtTarefa(id) {
   const index = listaDeTarefas.value.findIndex(e => e.id == id);
@@ -71,12 +77,19 @@ function edtTarefa(id) {
 function concluirTarefa(id) {
   const index = listaDeTarefas.value.findIndex(e => e.id == id);
   if (
-  listaDeTarefas.value[index].status == 'pendente') {
-    listaDeTarefas.value[index].status = 'concluida';
-  } else {
-    listaDeTarefas.value[index].status = 'pendente';
+    listaDeTarefas.value[index].status == 'pendente') {
+      listaDeTarefas.value[index].status = 'concluida';
+    } else {
+      listaDeTarefas.value[index].status = 'pendente';
+    }
   }
-}
+  const filtro = ref('');
+  function  filtrarTarefas() {
+    if (filtro.value.trim().length > 0) {
+      return listaDeTarefas.value.filter(e => e.titulo.includes(filtro.value));
+    }
+    return listaDeTarefas.value;
+  }
 </script>
 
 <template>
@@ -86,16 +99,23 @@ function concluirTarefa(id) {
         Lista de tarefas
       </h1>
       <p>
-        Insira o novo título e os detalhes de uma nova tarefa:
+        Insira o novo título e os detalhes de uma nova tarefa (Possui armazenamento local):
       </p>
-      <input type="text" v-model="novoTitulo" placeholder="título">
-      <input type="text" v-model="novosDetalhes" placeholder="detalhes">
+      <div>
+        <input type="text" v-model="novoTitulo" placeholder="título">
+        <input type="text" v-model="novosDetalhes" placeholder="detalhes">
+        <input type="text" v-model="filtro" placeholder="Insira seu filtro aqui">
+        <p>
+          tarefas concluídas: {{ quantConcluidas }}
+          tarefas pendente: {{ quantPendente }}
+        </p>
+      </div>
       <br>
       <button @click="addTarefa">Adicionar tarefa</button>
     </div>
     <div class="box">
       <ul>
-        <li v-for="tarefa in listaDeTarefas" :key="tarefa.id" :class="{concluida: tarefa.status == 'concluida'}">
+        <li v-for="tarefa in filtrarTarefas()" :key="tarefa.id" :class="{concluida: tarefa.status == 'concluida'}">
           <span @click="concluirTarefa(tarefa.id)">
             {{ tarefa.titulo }}
             <span>
@@ -143,12 +163,16 @@ function concluirTarefa(id) {
   background-color: rgb(52, 14, 87);
   color: rgb(255, 255, 255);
   padding: 4px;
-  margin-bottom: 5px
+  margin-bottom: 5px;
+  margin-right: 5px;
 }
 
 .container ul li {
   display: flex;
   justify-content: space-between;
+}
+.container ul li span {
+  font-size: 1.3rem;
 }
 .container ul li span.concluida {
   text-decoration: line-through;

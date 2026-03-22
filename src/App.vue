@@ -54,8 +54,7 @@ function addTarefa() {
         status: 'pendente',
       })
       novoId.value++
-      console.log(
-      listaDeTarefas.value[listaDeTarefas.value.length - 1].id);
+      console.log(listaDeTarefas.value[listaDeTarefas.value.length - 1].id)
     } else {
       alert('Não deixe nenhum campo vazio ao tentar adicionar tarefas!')
     }
@@ -63,6 +62,7 @@ function addTarefa() {
     const itemAEditar = listaDeTarefas.value[posicao.value]
     itemAEditar.titulo = novoTitulo.value
     itemAEditar.detalhes = novosDetalhes.value
+    posicao.value = -1
   }
   novoTitulo.value = ''
   novosDetalhes.value = ''
@@ -106,7 +106,7 @@ function filtrarTarefas() {
         <p>tarefas concluídas: {{ quantConcluidas }} tarefas pendente: {{ quantPendente }}</p>
       </div>
       <br />
-      <button @click="addTarefa">Adicionar tarefa</button>
+      <button @click="addTarefa" class="addTarefa">Adicionar tarefa</button>
     </div>
     <div class="box">
       <ul>
@@ -121,11 +121,11 @@ function filtrarTarefas() {
               {{ tarefa.detalhes }}
             </span>
           </span>
-          <div class='botoes'>
+          <div class="botoes">
             <button @click="edtTarefa(tarefa)">
               <font-awesome-icon icon="fa-solid fa-pen-to-square" />
             </button>
-            <button @click="delTarefa(tarefa)">
+            <button @click="delTarefa(tarefa)" :disabled="posicao !== -1">
               <font-awesome-icon icon="fa-solid fa-trash" />
             </button>
           </div>
@@ -198,5 +198,40 @@ function filtrarTarefas() {
 .container ul li div.botoes button {
   padding: 2px;
   margin-right: 5px;
+}
+.container div.box button.addTarefa {
+  margin: 0 30%;
+  text-align: center;
+  background-color: rgb(52, 14, 87);
+  color: rgb(255, 255, 255);
+}
+.container div.box div.botoes button:first-of-type {
+  background-color: rgb(86, 238, 86);
+}
+.container div.box div.botoes button:last-of-type {
+  background-color: rgb(241, 61, 61);
+}
+@media screen and (max-width: 1000px) {
+  .container div.box {
+    margin: 0 15vw 10px 15vw;
+  }
+  .container div.box h1 {
+    font-size: 2rem;
+  }
+
+  .container div.box p,
+  input,
+  button {
+    font-size: 1.3rem;
+  }
+  .container div.box span {
+    font-size: 1.5rem;
+  }
+  .container div.box span > span {
+    font-size: 1rem;
+  }
+  .container div.box div.botoes button {
+    font-size: 1.4rem;
+  }
 }
 </style>

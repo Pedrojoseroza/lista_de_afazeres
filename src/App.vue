@@ -1,6 +1,6 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { ref, watch } from 'vue';
+import Item from './components/Item.vue';
 const novoTitulo = ref('')
 const novosDetalhes = ref('')
 const posicao = ref(-1)
@@ -113,22 +113,15 @@ function filtrarTarefas() {
         <li
           v-for="tarefa in filtrarTarefas()"
           :key="tarefa.id"
-          :class="{ concluida: tarefa.status == 'concluida' }"
         >
-          <span @click="concluirTarefa(tarefa)">
-            {{ tarefa.titulo }}
-            <span>
-              {{ tarefa.detalhes }}
-            </span>
-          </span>
-          <div class="botoes">
-            <button @click="edtTarefa(tarefa)">
-              <font-awesome-icon icon="fa-solid fa-pen-to-square" />
-            </button>
-            <button @click="delTarefa(tarefa)" :disabled="posicao !== -1">
-              <font-awesome-icon icon="fa-solid fa-trash" />
-            </button>
-          </div>
+        <Item 
+        :titulo='tarefa.titulo'
+         :detalhes='tarefa.detalhes' 
+         :status='tarefa.status'
+         @finalizar="concluirTarefa(tarefa)"
+         @deletar="delTarefa(tarefa)"
+         @editar="edtTarefa(tarefa)">
+        </Item>
         </li>
       </ul>
     </div>
@@ -177,39 +170,11 @@ function filtrarTarefas() {
 .container ul li span {
   font-size: 1rem;
 }
-.container ul li span.concluida {
-  text-decoration: line-through;
-  font-weight: bold;
-}
-.container ul li span {
-  font-weight: bold;
-  display: block;
-  cursor: pointer;
-}
-.container ul li span > span {
-  font-size: 0.8rem;
-  color: rgba(0, 0, 0, 0.596);
-  max-width: 20vw;
-  font-weight: normal;
-}
-.container ul li.concluida span {
-  text-decoration: line-through;
-}
-.container ul li div.botoes button {
-  padding: 2px;
-  margin-right: 5px;
-}
 .container div.box button.addTarefa {
   margin: 0 30%;
   text-align: center;
   background-color: rgb(52, 14, 87);
   color: rgb(255, 255, 255);
-}
-.container div.box div.botoes button:first-of-type {
-  background-color: rgb(86, 238, 86);
-}
-.container div.box div.botoes button:last-of-type {
-  background-color: rgb(241, 61, 61);
 }
 @media screen and (max-width: 1000px) {
   .container div.box {

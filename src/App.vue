@@ -3,7 +3,7 @@ import { ref, watch } from 'vue'
 import Item from './components/Item.vue'
 import buttonTask from './components/buttonTask.vue'
 import { listaDeTarefas } from './data/tarefas'
-import { filtrarTarefas, ordenarTarefas } from './utils/utils'
+import { ordenarTarefas, tarefasFiltradas } from './utils/utils'
 import { useTarefa } from './composables/useTarefa'
 const {
   novoTitulo,
@@ -14,6 +14,8 @@ const {
   edtTarefa,
   addTarefa,
   delTarefa,
+  quantConcluidas,
+  quantPendente,
 } = useTarefa();
 </script>
 
@@ -38,7 +40,7 @@ const {
     </div>
     <div class="box">
       <ul>
-        <li v-for="tarefa in filtrarTarefas(listaDeTarefas, filtro)" :key="tarefa.id">
+        <li v-for="tarefa in tarefasFiltradas" :key="tarefa.id">
           <Item
             :titulo="tarefa.titulo"
             :detalhes="tarefa.detalhes"

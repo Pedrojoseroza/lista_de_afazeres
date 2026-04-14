@@ -7,6 +7,9 @@ function useTarefa() {
   const posicao = ref(-1)
   const novoId = ref(JSON.parse(localStorage.getItem('id')) || '5')
   const filtro = ref('')
+  const quantConcluidas = ref( listaDeTarefas.value.filter((e) => e.status == 'concluida').length);
+  const quantPendente = ref(listaDeTarefas.value.filter((e) => e.status == 'pendente').length)
+
   // Nunca haverá dois itens como o mesmo id, basicamente, o ID é a tentativa de replicar uma chave primária;
   watch(novoId.value, (novoId) => {
     localStorage.setItem('id', JSON.stringify(novoId))
@@ -40,7 +43,7 @@ function useTarefa() {
   }
   function delTarefa(item) {
     const index = listaDeTarefas.value.indexOf(item)
-    listaDeTarefas.value.splice(index, 1)
+    listaDeTarefas.value.splice(index, 1);
   }
   function edtTarefa(item) {
     const index = listaDeTarefas.value.indexOf(item)
@@ -65,6 +68,8 @@ function useTarefa() {
     edtTarefa,
     addTarefa,
     delTarefa,
+    quantConcluidas,
+    quantPendente
   }
 }
 export { useTarefa }

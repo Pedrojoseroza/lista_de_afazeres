@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref } from 'vue'
 const tarefas = JSON.parse(localStorage.getItem('lista')) || [
   {
     id: 1,
@@ -25,6 +25,6 @@ const tarefas = JSON.parse(localStorage.getItem('lista')) || [
     status: 'pendente',
   },
 ]
-const antigaLista = tarefas;
-const listaDeTarefas = ref(antigaLista);
-export {listaDeTarefas};
+const antigaLista = tarefas
+const listaDeTarefas = ref(antigaLista)
+export { listaDeTarefas }

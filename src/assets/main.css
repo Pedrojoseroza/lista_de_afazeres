@@ -16,7 +16,7 @@ a {
   padding: 30px 0 10px 0;
 }
 
- div.box {
+div.box {
   margin: 0 30vw 10px 30vw;
   background-color: plum;
   padding: 20px 15px;
@@ -24,25 +24,25 @@ a {
 }
 
 @media screen and (max-width: 1000px) {
-   div.box {
+  div.box {
     margin: 0 15vw 10px 15vw;
   }
-   div.box h1 {
+  div.box h1 {
     font-size: 2rem;
   }
 
-   div.box p,
+  div.box p,
   input,
   button {
     font-size: 1.3rem;
   }
-   div.box span {
+  div.box span {
     font-size: 1.5rem;
   }
-   div.box span > span {
+  div.box span > span {
     font-size: 1rem;
   }
-   div.box div.botoes button {
+  div.box div.botoes button {
     font-size: 1.4rem;
   }
 }

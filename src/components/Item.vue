@@ -1,4 +1,5 @@
 <script setup>
+import buttonTask from './buttonTask.vue';
 defineProps(['titulo', 'detalhes', 'status']);
 defineEmits(['finalizar', 'deletar', 'editar']);
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -12,12 +13,12 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
         </span>
       </span>
       <div class="botoes">
-        <button @click="$emit('editar')">
-          <font-awesome-icon icon="fa-solid fa-pen-to-square" />
-        </button>
-        <button @click="$emit('deletar')">
-          <font-awesome-icon icon="fa-solid fa-trash" />
-        </button>
+          <buttonTask  :tipo="'editar'" @clique="$emit('editar')">
+            <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+          </buttonTask>
+          <buttonTask  :tipo="'deletar'" @clique="$emit('deletar')">
+            <font-awesome-icon icon="fa-solid fa-trash" />           
+        </buttonTask>
       </div>
     </div>
 </template>
@@ -46,15 +47,8 @@ div.item {
 .concluida span {
   text-decoration: line-through;
 }
- div.botoes button {
-  padding: 2px;
-  margin-right: 5px;
-}
-
- div.botoes button:first-of-type {
-  background-color: rgb(86, 238, 86);
-}
- div.botoes button:last-of-type {
-  background-color: rgb(241, 61, 61);
+.botoes {
+  display: flex;
+  align-items: center;
 }
 </style>
